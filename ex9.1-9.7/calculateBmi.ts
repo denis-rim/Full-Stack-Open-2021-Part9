@@ -1,4 +1,22 @@
-function calculateBmi(height: number, mass: number): string {
+interface IInput {
+  height: number;
+  weight: number;
+}
+
+function parseArguments(args: Array<string>): IInput {
+  if (args.length < 4) throw new Error("Not enough arguments");
+  if (args.length > 4) throw new Error("Too many arguments");
+
+  if (isNaN(Number(args[2])) || isNaN(Number(args[3]))) {
+    throw new Error("Provided values were not numbers!");
+  }
+  return {
+    height: Number(args[2]),
+    weight: Number(args[3]),
+  };
+}
+
+function calculateBmi(height: number, mass: number) {
   const bmi = mass / (height / 100) ** 2;
   if (bmi < 16) {
     return "Underweight (severe thinness)";
@@ -19,4 +37,13 @@ function calculateBmi(height: number, mass: number): string {
   }
 }
 
-console.log(calculateBmi(180, 74));
+try {
+  const { height, weight } = parseArguments(process.argv);
+  console.log(calculateBmi(height, weight));
+} catch (error) {
+  let errorMessage = "Something bad happened.";
+  if (error instanceof Error) {
+    errorMessage += " Error: " + error.message;
+  }
+  console.log(errorMessage);
+}
