@@ -1,49 +1,56 @@
-interface IInput {
-  height: number;
-  weight: number;
+interface IParsedArguments {
+  parsedHeight: number;
+  parsedWeight: number;
 }
 
-function parseArguments(args: Array<string>): IInput {
-  if (args.length < 4) throw new Error("Not enough arguments");
-  if (args.length > 4) throw new Error("Too many arguments");
+interface IOutput {
+  height: number;
+  weight: number;
+  bmi: string;
+}
 
-  if (isNaN(Number(args[2])) || isNaN(Number(args[3]))) {
-    throw new Error("Provided values were not numbers!");
+export function parseArguments(
+  inputHeight: string,
+  inputWeight: string
+): IParsedArguments {
+  const parsedHeight = parseInt(inputHeight);
+  const parsedWeight = parseInt(inputWeight);
+
+  if (isNaN(parsedHeight) || isNaN(parsedWeight)) {
+    throw new Error("malformatted parameters");
   }
   return {
-    height: Number(args[2]),
-    weight: Number(args[3]),
+    parsedHeight,
+    parsedWeight,
   };
 }
 
-function calculateBmi(height: number, mass: number) {
-  const bmi = mass / (height / 100) ** 2;
-  if (bmi < 16) {
-    return "Underweight (severe thinness)";
-  } else if (bmi >= 16 && bmi <= 16.9) {
-    return "Underweight (moderate thinness)";
-  } else if (bmi >= 17 && bmi <= 18.4) {
-    return "Underweight (mild thinness)";
-  } else if (bmi >= 18.5 && bmi <= 24.9) {
-    return "Normal (healthy weight)";
-  } else if (bmi >= 25 && bmi <= 29.9) {
-    return "Overweight (pre-obesity)";
-  } else if (bmi >= 30 && bmi <= 34.9) {
-    return "Overweight (obesity class I)";
-  } else if (bmi >= 35 && bmi <= 39.9) {
-    return "Overweight (obesity class II)";
-  } else {
-    return "Overweight (obesity class III)";
-  }
-}
+export function calculateBmi(height: number, weight: number): IOutput {
+  const bmiIndex = weight / (height / 100) ** 2;
 
-try {
-  const { height, weight } = parseArguments(process.argv);
-  console.log(calculateBmi(height, weight));
-} catch (error) {
-  let errorMessage = "Something bad happened.";
-  if (error instanceof Error) {
-    errorMessage += " Error: " + error.message;
+  let bmi;
+
+  if (bmiIndex < 16) {
+    bmi = "Severely underweight";
+  } else if (bmiIndex >= 16 && bmiIndex <= 16.9) {
+    bmi = "Underweight (moderate thinness)";
+  } else if (bmiIndex >= 17 && bmiIndex <= 18.4) {
+    bmi = "Underweight (mild thinness)";
+  } else if (bmiIndex >= 18.5 && bmiIndex <= 24.9) {
+    bmi = "Normal (healthy weight)";
+  } else if (bmiIndex >= 25 && bmiIndex <= 29.9) {
+    bmi = "Overweight (pre-obesity)";
+  } else if (bmiIndex >= 30 && bmiIndex <= 34.9) {
+    bmi = "Overweight (obesity class I)";
+  } else if (bmiIndex >= 35 && bmiIndex <= 39.9) {
+    bmi = "Overweight (obesity class II)";
+  } else {
+    bmi = "Overweight (obesity class III)";
   }
-  console.log(errorMessage);
+
+  return {
+    height,
+    weight,
+    bmi,
+  };
 }
