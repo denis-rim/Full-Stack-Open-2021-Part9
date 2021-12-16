@@ -1,7 +1,8 @@
 import React from "react";
-import { PartsProps } from "../types";
+import { CoursePart } from "../types";
+import Part from "./Part";
 
-const Content = ({ parts }: { parts: PartsProps[] }) => {
+const Content = ({ parts }: { parts: CoursePart[] }) => {
   if (!parts) {
     return <p>No parts</p>;
   }
@@ -9,9 +10,7 @@ const Content = ({ parts }: { parts: PartsProps[] }) => {
   return (
     <div>
       {parts.map((part) => (
-        <p key={part.name}>
-          {part.name} {part.exerciseCount}
-        </p>
+        <Part key={part.name} part={part} />
       ))}
     </div>
   );
