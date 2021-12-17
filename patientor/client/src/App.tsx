@@ -7,7 +7,8 @@ import { apiBaseUrl } from "./constants";
 import { useStateValue } from "./state";
 import { Patient } from "./types";
 
-import PatientListPage from "./PatientListPage";
+import PatientListPage from "./pages/PatientListPage";
+import Index from "./pages/PatientInfoPage";
 
 const App = () => {
   const [, dispatch] = useStateValue();
@@ -37,8 +38,11 @@ const App = () => {
           </Button>
           <Divider hidden />
           <Switch>
-            <Route path="/">
+            <Route exact path="/">
               <PatientListPage />
+            </Route>
+            <Route path="/patients/:patientId">
+              <Index />
             </Route>
           </Switch>
         </Container>
