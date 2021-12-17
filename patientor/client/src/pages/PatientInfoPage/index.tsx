@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { apiBaseUrl } from "../../constants";
 import { Patient } from "../../types";
-import { useStateValue } from "../../state";
+import { updatePatientInfo, useStateValue } from "../../state";
 import { Icon } from "semantic-ui-react";
 
 const Index = () => {
@@ -22,7 +22,7 @@ const Index = () => {
         const { data: patientWithFullInfo } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${patientId}`
         );
-        dispatch({ type: "UPDATE_PATIENT_INFO", payload: patientWithFullInfo });
+        dispatch(updatePatientInfo(patientWithFullInfo));
       } catch (error) {
         console.error(error);
       }
