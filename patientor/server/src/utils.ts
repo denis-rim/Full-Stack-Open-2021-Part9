@@ -48,6 +48,7 @@ const parseGender = (gender: unknown): Gender => {
   return gender;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const parseOccupation = (occupation: any): string => {
   if (!occupation || !isString(occupation)) {
     throw new Error(`Incorrect or missing Occupation ${occupation}`);
@@ -55,6 +56,7 @@ const parseOccupation = (occupation: any): string => {
   return occupation;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const parseEntries = (entries: any): Entry[] => {
   if (!entries || !isArray(entries)) {
     throw new Error(`Incorrect or missing entries: ${entries}`);
