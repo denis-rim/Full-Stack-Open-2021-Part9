@@ -22,10 +22,3 @@ app.use("/api/patients", patientsRouter);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-// 9.11: Patientor backend, step4
-// Create data type Patient and set up the GET endpoint /api/patients which returns all patients to the frontend, excluding field ssn. Use a utility type to make sure you are selecting and returning only the wanted fields.
-//
-//     In this exercise, you may assume that field gender has type string.
-//
-// Try the endpoint with your browser and ensure that ssn is not included in the response:

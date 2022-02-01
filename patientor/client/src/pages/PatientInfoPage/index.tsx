@@ -2,12 +2,16 @@ import React from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { apiBaseUrl } from "../../constants";
-import { Patient } from "../../types";
-import { updatePatientInfo, useStateValue } from "../../state";
+import { Diagnosis, Patient } from "../../types";
+import {
+  setDiagnosisList,
+  updatePatientInfo,
+  useStateValue,
+} from "../../state";
 import { Icon } from "semantic-ui-react";
 
 const Index = () => {
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnosis }, dispatch] = useStateValue();
   const { patientId } = useParams<{ patientId: string }>();
 
   const patient = Object.values(patients).find(
@@ -15,27 +19,34 @@ const Index = () => {
   );
 
   React.useEffect(() => {
-    if (patient?.ssn) return;
-
-    const fetchPatient = async () => {
+    async function main() {
       try {
-        const { data: patientWithFullInfo } = await axios.get<Patient>(
+        const { data: patientInfo } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${patientId}`
         );
-        dispatch(updatePatientInfo(patientWithFullInfo));
-      } catch (error) {
-        console.error(error);
+        const { data: diagnosesFromApi } = await axios.get<Diagnosis[]>(
+          `${apiBaseUrl}/diagnoses`
+        );
+
+        dispatch(setDiagnosisList(diagnosesFromApi));
+        dispatch(updatePatientInfo(patientInfo));
+      } catch (err) {
+        console.warn(err);
       }
-    };
-    void fetchPatient();
-  }, [patientId]);
+    }
+
+    void main();
+  }, [patientId, diagnosis]);
 
   if (!patient) return <div>Patient not found</div>;
+
+  console.log(patient);
+  console.log(diagnosis);
 
   return (
     <div>
       <h3>
-        {patient.name}{" "}
+        {patient.name}
         {patient.gender === "male" ? (
           <Icon name="mars" />
         ) : (
@@ -44,22 +55,29 @@ const Index = () => {
       </h3>
       <p>ssn: {patient.ssn}</p>
       <p>occupation: {patient.occupation}</p>
-      <h3>
-        entries
-      </h3>
+      <h3>entries</h3>
       <div>
-        {patient.entries.map((entry) => (
-            <div key={entry.id}>
-              <p >{entry.date} {entry.description}</p>
-              {entry?.diagnosisCodes ? (
-                  <ul>
-                    {entry.diagnosisCodes.map(code => (
-                        <li key={code}>{code}</li>
-                    ))}
-                  </ul>
-              ): null}
-            </div>
-        ))}
+        {patient.entries &&
+          patient.entries.map((entry) => {
+            return (
+              <div key={entry.id}>
+                <p>
+                  {entry.date} {entry.description}
+                </p>
+
+                <ul>
+                  {entry.diagnosisCodes &&
+                    entry.diagnosisCodes.map((code) => {
+                      return (
+                        <li key={code}>
+                          {code}: {diagnosis[code].name}
+                        </li>
+                      );
+                    })}
+                </ul>
+              </div>
+            );
+          })}
       </div>
     </div>
   );
