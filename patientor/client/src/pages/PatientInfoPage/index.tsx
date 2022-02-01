@@ -40,10 +40,27 @@ const Index = () => {
           <Icon name="mars" />
         ) : (
           <Icon name="venus" />
-        )}{" "}
+        )}
       </h3>
       <p>ssn: {patient.ssn}</p>
       <p>occupation: {patient.occupation}</p>
+      <h3>
+        entries
+      </h3>
+      <div>
+        {patient.entries.map((entry) => (
+            <div key={entry.id}>
+              <p >{entry.date} {entry.description}</p>
+              {entry?.diagnosisCodes ? (
+                  <ul>
+                    {entry.diagnosisCodes.map(code => (
+                        <li key={code}>{code}</li>
+                    ))}
+                  </ul>
+              ): null}
+            </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -7,6 +7,7 @@ export type State = {
   patients: { [id: string]: Patient };
 };
 
+  // patients: { [id: string]: Patient | undefined };
 const initialState: State = {
   patients: {},
 };

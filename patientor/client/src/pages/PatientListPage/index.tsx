@@ -31,7 +31,7 @@ const PatientListPage = () => {
       );
       dispatch(addPatient(newPatient));
       closeModal();
-    } catch (e) {
+    } catch (e: any) {
       console.error(e.response?.data || "Unknown Error");
       setError(e.response?.data?.error || "Unknown error");
     }

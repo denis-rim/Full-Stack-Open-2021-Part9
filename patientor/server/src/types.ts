@@ -1,6 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-// export interface Entry {}
-
 export interface DiagnosisEntry {
   code: string;
   name: string;
